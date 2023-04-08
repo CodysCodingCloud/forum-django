@@ -1,0 +1,12 @@
+{% extends 'main.html' %}
+
+<!-- child add to the extended template's block -->
+{% block content %}
+<h1>Im alive in home</h1>
+<div>
+	<h3>data</h3>
+	{% for dp in data %}
+	<div><h5>{{dp.id}} -- {{dp.name}}</h5></div>
+	{% endfor %}
+</div>
+{% endblock %}
