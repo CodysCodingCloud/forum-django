@@ -6,7 +6,13 @@
 <div>
 	<h3>data</h3>
 	{% for dp in data %}
-	<div><h5>{{dp.id}} -- {{dp.name}}</h5></div>
+	<div>
+		<h5>
+			{{dp.id}} --
+			<a href="{% url 'room' dp.id %}">{{dp.name}}</a>
+			<!-- {% url 'room' dp.id %} = /room/1 -->
+		</h5>
+	</div>
 	{% endfor %}
 </div>
 {% endblock %}
