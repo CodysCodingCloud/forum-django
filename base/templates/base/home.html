@@ -2,17 +2,44 @@
 
 <!-- child add to the extended template's block -->
 {% block content %}
-<h1>Im alive in home</h1>
-<div>
-	<h3>data</h3>
-	{% for dp in data %}
+<style>
+	.home {
+		display: grid;
+		grid-template-columns: 1fr 2fr;
+	}
+</style>
+<div class="home">
 	<div>
-		<h5>
-			{{dp.id}} --
-			<a href="{% url 'room' dp.id %}">{{dp.name}}</a>
-			<!-- {% url 'room' dp.id %} = /room/1 -->
-		</h5>
+		<h3>The Topics</h3>
+		<div>
+			<a href="{% url 'home' %}">All</a>
+		</div>
+		{% for topic in topics %}
+		<div>
+			<a href="{% url 'home' %}?q={{topic.name}}">{{topic.name}}</a>
+		</div>
+		{% endfor %}
 	</div>
-	{% endfor %}
+
+	<div>
+		<h1>Im alive in home</h1>
+		<div>
+			<h3>The {{room_count}} Available Rooms</h3>
+			<a href="{% url 'create-room' %}">Create a new Room?</a>
+			{% for room in rooms %}
+			<div>
+				<a href="/user/{{room.host.id}}">@{{room.host}}</a>
+				<a href="{% url 'update-room' room.id %}">edit</a>
+				<a href="{% url 'delete-room' room.id %}">delete</a>
+				<h5>
+					{{rooms.id}} --
+					<a href="{% url 'room' room.id %}">{{room.name}}</a>
+					<small>{{room.topic.name}}</small>
+					<!-- {% url 'room' room.id %} = /room/1 -->
+				</h5>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
 </div>
 {% endblock %}

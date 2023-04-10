@@ -3,4 +3,7 @@
 	<a href="/room">room</a>
 	<a href="/user">user</a>
 	<a href="/settings">settings</a>
+	<form method="'GET" action="{% url 'home' %}">
+		<input type="text" name="q" placeholder="search rooms...." />
+	</form>
 </nav>
