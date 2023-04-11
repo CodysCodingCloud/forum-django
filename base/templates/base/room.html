@@ -1,7 +1,9 @@
-{% extends 'main.html' %}
-
+{% extends "main.html" %}
 <!-- child add to the extended template's block -->
 {% block content %}
 <h1>Room page?</h1>
-<h5>you are in {{room.name}} room</h5>
-{% endblock %}
+<h2>you are in {{ room.name }} room</h2>
+<p>{{ room.description }}</p>
+<!-- <div></div> -->
+<h3>Conversation</h3>
+{% endblock content %}
