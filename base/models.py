@@ -1,6 +1,10 @@
-from django.db import models
+""""""
 import uuid
+from django.db import models
+
 from django.contrib.auth.models import User
+
+# from django.conf import settings
 
 # Create your models here.
 
@@ -16,10 +20,13 @@ class Topic(models.Model):
 
 
 class Room(models.Model):
-    # default id= models.IntegerField(autoincrement?)
+    # id= models.IntegerField(autoincrement?)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     topic = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True)
     host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    # host = models.ForeignKey(
+    #     settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
+    # )
     name = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
     #  alllows null & blank description
@@ -38,6 +45,7 @@ class Room(models.Model):
 
 class Message(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)  # or models.SET_NULL
     body = models.TextField()
     updated = models.DateTimeField(auto_now=True)

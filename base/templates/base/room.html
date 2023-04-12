@@ -1,9 +1,21 @@
 {% extends "main.html" %}
 <!-- child add to the extended template's block -->
 {% block content %}
-<h1>Room page?</h1>
-<h2>you are in {{ room.name }} room</h2>
-<p>{{ room.description }}</p>
-<!-- <div></div> -->
-<h3>Conversation</h3>
+<div>
+	<h1>Room page?</h1>
+	<h2>you are in {{ room.name }} room</h2>
+	<p>{{ room.description }}</p>
+	<!-- <div></div> -->
+	<h3>Conversation</h3>
+	<hr />
+	{% for message in room_messages%}
+	<div>
+		<small>@{{message.user}} {{message.created|timesince}} ago</small>
+		<p>{{message.body}}</p>
+	</div>
+	{% endfor %}
+	<form>
+		<input type="textarea" />
+	</form>
+</div>
 {% endblock content %}

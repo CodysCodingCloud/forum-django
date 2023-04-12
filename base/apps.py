@@ -1,3 +1,4 @@
+""" configs for thor this app"""
 from django.apps import AppConfig
 
 

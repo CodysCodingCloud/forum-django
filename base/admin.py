@@ -1,3 +1,5 @@
+"""for editing http://localhost:8000/admin page"""
+
 from django.contrib import admin
 
 # Register your models here.
@@ -15,11 +17,15 @@ admin.site.register(Message)
 
 
 class RoomInLine(admin.TabularInline):
+    """controls the (extra)number of rows of (model)rooms to add at once"""
+
     model = Room
     extra = 3
 
 
 class TopicAdmin(admin.ModelAdmin):
+    """shows number of editable fields in Topics"""
+
     fieldsets = [
         (None, {'fields': ['name']}),
     ]

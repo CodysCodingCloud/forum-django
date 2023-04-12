@@ -1,16 +1,22 @@
+""" states and logic for your templates """
 from django.shortcuts import render, redirect
+
+# get_object_or_404, get_list_or_404
 from django.contrib import messages
 from django.http import HttpResponse
 from django.db.models import Q
-from .models import Room, Topic, Message
+
+# pylint: disable=import-error
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import RoomForm
 from django.contrib.auth.forms import UserCreationForm
+from .forms import RoomForm
+from .models import Room, Topic, Message
 
 
-def loginView(request):
+def login_view(request):
+    """login user"""
     page = 'login'
     if request.user.is_authenticated:
         return redirect('/')
@@ -19,19 +25,22 @@ def loginView(request):
         password = request.POST.get('password')
         try:
             user = User.objects.get(username=username)
-        except:
+        except Exception as err:
+            print(err)
+            messages.error(request, err)
             messages.error(request, 'User does not exist')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('/')
         else:
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('/')
             messages.error(request, 'Username or Password do not exist')
     context = {'page': page}
     return render(request, 'base/login_register.html', context)
 
 
-def registerView(request):
+def register_view(request):
+    """registers user using post"""
     page = 'register'
     form = UserCreationForm()
     if request.method == 'POST':
@@ -48,17 +57,21 @@ def registerView(request):
     return render(request, 'base/login_register.html', context)
 
 
-def logoutView(request):
+def logout_view(request):
+    """logs out user"""
     logout(request)
     return redirect('/')
 
 
 def home(request):
+    """root dir"""
     # queryset = ModelName.objects.all() | get() | filter() | exclude()
     # var      = Mn     q    att    method
-    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    queryset = request.GET.get('q') if request.GET.get('q') is not None else ''
     rooms = Room.objects.filter(
-        Q(topic__name__icontains=q) | Q(name__icontains=q) | Q(description__icontains=q)
+        Q(topic__name__icontains=queryset)
+        | Q(name__icontains=queryset)
+        | Q(description__icontains=queryset)
     ).order_by('-updated')
     topics = Topic.objects.all()
     room_count = rooms.count()
@@ -67,15 +80,13 @@ def home(request):
     return render(request, 'base/home.html', context)
 
 
-def room(request, pk):
+def room_view(request, pk):
     room = Room.objects.get(id=pk)
-
+    room_messages = room.message_set.all()
     # for i in data:
     #   if i['id']==int(pk):
     #     room=i
-    context = {
-        'room': room,
-    }
+    context = {'room': room, "room_messages": room_messages}
     return render(request, 'base/room.html', context)
 
 
