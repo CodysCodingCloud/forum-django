@@ -14,8 +14,10 @@
 		<p>{{message.body}}</p>
 	</div>
 	{% endfor %}
-	<form>
-		<input type="textarea" />
+	<form method="post" action="">
+		{%csrf_token%}
+		<input type="textarea" name="body" placeholder="@{{room.name}}" />
+		<button type="submit">Send</button>
 	</form>
 </div>
 {% endblock content %}

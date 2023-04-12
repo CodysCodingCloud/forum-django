@@ -81,11 +81,19 @@ def home(request):
 
 
 def room_view(request, pk):
+    """retrieves many to one relationships - messages to room"""
     room = Room.objects.get(id=pk)
     room_messages = room.message_set.all()
-    # for i in data:
-    #   if i['id']==int(pk):
-    #     room=i
+    if request.method == "POST":
+        message = Message.objects.create(
+            body=request.POST.get('body'), user=request.user, room=room
+        )
+        # message.save()
+        # room.message_set(request.POST)
+        return redirect('room', pk=room.id)
+    if request.method == "DELETE":
+        return redirect('room', pk=room.id)
+
     context = {'room': room, "room_messages": room_messages}
     return render(request, 'base/room.html', context)
 
@@ -97,6 +105,7 @@ def createRoom(request):
     if request.method == 'POST':
         form = RoomForm(request.POST)
         if form.is_valid():
+            # name=request.POST.get('name')
             form.save()
             return redirect('/')
         print(request.POST)
@@ -107,12 +116,14 @@ def createRoom(request):
 @login_required(login_url='login')
 def updateRoom(request, pk):
     room = Room.objects.get(id=pk)
+    # initial form data
     form = RoomForm(instance=room)
 
     if request.user != room.host:
         return HttpResponse('you are not the user')
     if request.method == 'POST':
-        form = RoomForm(request.POST)
+        # needs initial data to know what to update
+        form = RoomForm(request.POST, instance=room)
         if form.is_valid():
             form.save()
             return redirect('/')
@@ -124,7 +135,7 @@ def updateRoom(request, pk):
 @login_required(login_url='login')
 def deleteRoom(request, pk):
     room = Room.objects.get(id=pk)
-    if request.method == 'POST':
+    if request.method == 'DELETE':
         room.delete()
         return redirect('/')
     return render(request, 'base/delete.html', {'obj': room})
