@@ -1,0 +1,2 @@
+[MASTER]
+django-settings-module=djangotest.settings

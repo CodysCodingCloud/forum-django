@@ -1,42 +1,23 @@
 {% extends "main.html" %}
 <!-- child add to the extended template"s block -->
 {% block content %}
-<style></style>
-<div class="container">
-	<div class="row">
-		<div class="col-4">
-			<h3>The Topics</h3>
-			<div>
-				<a href="{% url 'home' %}">All</a>
-			</div>
-			{% for topic in topics %}
-			<div>
-				<a href="{% url 'home' %}?q={{ topic.name }}">{{ topic.name }}</a>
-			</div>
-			{% endfor %}
-		</div>
-		<div class="col-8">
-			<h1>Im alive in home</h1>
-			<div>
-				<h3>The {{ room_count }} Available Rooms</h3>
-				<a href="{% url 'create-room' %}">Create a new Room?</a>
-				{% for room in rooms %}
-				<div>
-					<a href="{% url 'user' room.host.id %}">@{{ room.host }}</a>
-					{% if request.user == room.host %}
-					<a href="{% url 'update-room' room.id %}">edit</a>
-					<a href="{% url 'delete-room' room.id %}">delete</a>
-					{% endif %}
-					<h5>
-						{{ rooms.id }} --
-						<a href="{% url 'room' room.id %}">{{ room.name }}</a>
-						<small>{{ room.topic.name }}</small>
-						<!-- {% url "room" room.id %} = /room/1 -->
-					</h5>
-				</div>
-				{% endfor %}
-			</div>
-		</div>
-	</div>
+<style>
+	.home-container{
+		display:grid;
+		grid-template-columns:1fr 3fr 1fr;
+		grid-gap:1rem;
+	}
+	.topics-container{
+
+	}
+</style>
+<div class="home-container">
+	{% include 'base/components/topic_list.html'%} 
+	</>
+	{% include 'base/components/room_list.html'%}
+	</>
+	{% include 'base/components/activity.html'%}
+
+
 </div>
 {% endblock content %}

@@ -1,0 +1,15 @@
+<div class="feed">
+	<h2>Recent activity</h2>
+	{% for message in recent_messages%}
+	<div>
+		<small class="name"
+			><a href="{% url 'user' message.user.id %}">@{{message.user}}</a>
+			{{message.created|timesince}}</small
+		>
+		<small>
+			in <a href="{%url 'room' message.room.id%}">{{message.room}}</a></small
+		>
+		<p>{{message}}</p>
+	</div>
+	{%endfor%}
+</div>

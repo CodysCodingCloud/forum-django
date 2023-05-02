@@ -75,26 +75,40 @@ def home(request):
     ).order_by('-updated')
     topics = Topic.objects.all()
     room_count = rooms.count()
+    recent_messages = Message.objects.all()
     # print(topics)
-    context = {'rooms': rooms, 'topics': topics, 'room_count': room_count}
+    context = {
+        'rooms': rooms,
+        'topics': topics,
+        'room_count': room_count,
+        'recent_messages': recent_messages,
+    }
     return render(request, 'base/home.html', context)
 
 
 def room_view(request, pk):
     """retrieves many to one relationships - messages to room"""
     room = Room.objects.get(id=pk)
-    room_messages = room.message_set.all()
+    room_messages = room.message_set.all().order_by('-created')
+    # orders by -descending vs ascending
+    participants = room.participants.all().order_by('username')
+    print(participants)
     if request.method == "POST":
         message = Message.objects.create(
             body=request.POST.get('body'), user=request.user, room=room
         )
+        room.participants.add(request.user)
         # message.save()
         # room.message_set(request.POST)
         return redirect('room', pk=room.id)
     if request.method == "DELETE":
         return redirect('room', pk=room.id)
 
-    context = {'room': room, "room_messages": room_messages}
+    context = {
+        'room': room,
+        "room_messages": room_messages,
+        'participants': participants,
+    }
     return render(request, 'base/room.html', context)
 
 
@@ -135,14 +149,30 @@ def updateRoom(request, pk):
 @login_required(login_url='login')
 def deleteRoom(request, pk):
     room = Room.objects.get(id=pk)
-    if request.method == 'DELETE':
+    # forms can only use GET | POST requests (idempotent)
+    # forms cannot sent DELETE or PUT requests because they are not idempotent
+    if request.method == 'POST':
         room.delete()
         return redirect('/')
     return render(request, 'base/delete.html', {'obj': room})
 
 
-def uer(request):
-    return render(request, 'user.html')
+@login_required(login_url='login')
+def deleteMessage(request, pk):
+    message = Message.objects.get(id=pk)
+    if request.user != message.user:
+        return HttpResponse('not the owner')
+    if request.method == 'POST':
+        message.delete()
+        return redirect('/room/' + str(message.room.id))
+    return render(request, 'base/delete.html', {'obj': message})
+
+
+def userprofile(request, pk):
+    userinfo = User.objects.get(id=pk)
+    rooms = user.room_set.all().order_by('-created')
+    context = {'user': userinfo, 'rooms': rooms}
+    return render(request, 'base/profile.html', context)
 
 
 def room4(request):

@@ -1,0 +1,22 @@
+<div class="room-container">
+	<h1>Im alive in home</h1>
+	<div>
+		<h3>The {{ room_count }} Available Rooms</h3>
+		<a href="{% url 'create-room' %}">Create a new Room?</a>
+		{% for room in rooms %}
+		<div>
+			<a href="{% url 'user' room.host.id %}">@{{ room.host }}</a>
+			{% if request.user == room.host %}
+			<a href="{% url 'update-room' room.id %}">edit</a>
+			<a href="{% url 'delete-room' room.id %}">delete</a>
+			{% endif %}
+			<h5>
+				{{ rooms.id }} --
+				<a href="{% url 'room' room.id %}">{{ room.name }}</a>
+				<small>{{ room.topic.name }}</small>
+				<!-- {% url "room" room.id %} = /room/1 -->
+			</h5>
+		</div>
+		{% endfor %}
+	</div>
+</div>
