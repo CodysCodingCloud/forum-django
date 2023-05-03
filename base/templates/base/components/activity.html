@@ -10,6 +10,10 @@
 			in <a href="{%url 'room' message.room.id%}">{{message.room}}</a></small
 		>
 		<p>{{message}}</p>
+		{% if request.user == message.user %}
+		<a href="url 'delete-message' message.id" class="d-delete">X</a>
+		{% endif %}
+		<hr />
 	</div>
 	{%endfor%}
 </div>

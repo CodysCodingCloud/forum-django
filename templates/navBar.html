@@ -1,4 +1,4 @@
-<nav>
+<nav class="">
 	<a href="{% url 'home' %}">home</a>
 	{% comment %} <a href="{% url 'room' %}">room</a>
 	<a href="{% url 'home' %}">user</a>
@@ -8,6 +8,7 @@
 	</form>
 	{% if request.user.is_authenticated %}
 	<h2>hello {{ request.user }}</h2>
+	<a href="{% url 'user' request.user.id %}">profile</a>
 	<a href="{% url 'logout' %}">logout</a>
 	{% else %}
 	<a href="{% url 'login' %}">login</a>

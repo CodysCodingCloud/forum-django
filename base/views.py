@@ -120,7 +120,9 @@ def createRoom(request):
         form = RoomForm(request.POST)
         if form.is_valid():
             # name=request.POST.get('name')
-            form.save()
+            room = form.save(commit=False)
+            room.host = request.user
+            room.save()
             return redirect('/')
         print(request.POST)
     context = {'form': form}
@@ -168,11 +170,37 @@ def deleteMessage(request, pk):
     return render(request, 'base/delete.html', {'obj': message})
 
 
-def userprofile(request, pk):
+def user_profile(request, pk):
     userinfo = User.objects.get(id=pk)
-    rooms = user.room_set.all().order_by('-created')
-    context = {'user': userinfo, 'rooms': rooms}
+    rooms = userinfo.room_set.all().order_by('-created')
+    topics = Topic.objects.all()
+    recent_messages = userinfo.message_set.all().order_by('-created')
+    context = {
+        'userinfo': userinfo,
+        'rooms': rooms,
+        'topics': topics,
+        'recent_messages': recent_messages,
+    }
     return render(request, 'base/profile.html', context)
+
+
+from .forms import UserForm
+
+
+@login_required(login_url='login')
+def update_user(request):
+    userinfo = request.user
+    form = UserForm(instance=userinfo)
+    context = {
+        # 'userinfo': userinfo,
+        'form': form
+    }
+    if request.method == 'POST':
+        form = UserForm(request.POST, instance=userinfo)
+        if form.is_valid():
+            form.save()
+            return redirect('profile', pk=userinfo.id)
+    return render(request, 'base/update_user.html', context)
 
 
 def room4(request):

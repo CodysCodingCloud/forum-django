@@ -1,14 +1,14 @@
 <div class="room-container">
-	<h1>Im alive in home</h1>
+	<h1>Where you meet people</h1>
 	<div>
 		<h3>The {{ room_count }} Available Rooms</h3>
 		<a href="{% url 'create-room' %}">Create a new Room?</a>
 		{% for room in rooms %}
-		<div>
+		<div class="roomlist">
 			<a href="{% url 'user' room.host.id %}">@{{ room.host }}</a>
 			{% if request.user == room.host %}
 			<a href="{% url 'update-room' room.id %}">edit</a>
-			<a href="{% url 'delete-room' room.id %}">delete</a>
+			<a href="{% url 'delete-room' room.id %}" class="d-delete">X</a>
 			{% endif %}
 			<h5>
 				{{ rooms.id }} --

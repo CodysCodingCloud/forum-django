@@ -1,23 +1,9 @@
 {% extends "main.html" %}
 <!-- child add to the extended template"s block -->
 {% block content %}
-<style>
-	.home-container{
-		display:grid;
-		grid-template-columns:1fr 3fr 1fr;
-		grid-gap:1rem;
-	}
-	.topics-container{
-
-	}
-</style>
 <div class="home-container">
-	{% include 'base/components/topic_list.html'%} 
-	</>
-	{% include 'base/components/room_list.html'%}
-	</>
-	{% include 'base/components/activity.html'%}
-
-
+	<div>{% include 'base/components/topic_list.html'%}</div>
+	<div>{% include 'base/components/room_list.html'%}</div>
+	<div>{% include 'base/components/activity.html'%}</div>
 </div>
 {% endblock content %}

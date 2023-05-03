@@ -1,8 +1,14 @@
 {% extends "main.html" %}
 <!-- child add to the extended template"s block -->
-{% block content %}
-<style></style>
+{% block content %} {% if request.user == userinfo %}
+<h1>My Profile Page</h1>
+<a href="{% url 'update_user' %}">edit profile</a>
+{% else %}
+<h1>{{userinfo.username}}'s Profile</h1>
+{% endif %}
 <div class="profile-container">
-	<h1>{{user.username}}</h1>
+	<div>{% include 'base/components/topic_list.html'%}</div>
+	<div>{% include 'base/components/room_list.html'%}</div>
+	<div>{% include 'base/components/activity.html'%}</div>
 </div>
 {% endblock content %}

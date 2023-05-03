@@ -18,6 +18,7 @@ urlpatterns = [
     path("update-room/<str:pk>/", views.updateRoom, name="update-room"),
     path("delete-room/<str:pk>/", views.deleteRoom, name="delete-room"),
     path("delete-message/<str:pk>/", views.deleteMessage, name="delete-message"),
-    path("profile/<str:pk>/", views.userprofile, name="user"),
+    path("profile/<str:pk>/", views.user_profile, name="user"),
+    path("update-user", views.update_user, name="update_user"),
     # path('user/<str:pk>/', views.user, name='user'),
 ]
