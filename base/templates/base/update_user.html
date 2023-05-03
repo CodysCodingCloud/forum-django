@@ -1,0 +1,20 @@
+{% extends "main.html" %}
+<!-- child add to the extended template"s block -->
+{% block content %} {% if request.user.is_authenticated %}
+<div>
+	<form class="form" action="" meythod="post" enctype="multipart/form-data">
+		{% csrf_token %} {% for field in form %}
+		<div class="form__group">
+			<label for="">{{field.label}}</label>
+			{{field}}
+		</div>
+		{%endfor%}
+		<div class="form-buttons">
+			<a href="{% url 'home' %}">cancel</a>
+			<button type="submit">Update</button>
+		</div>
+	</form>
+</div>
+{% else %}
+<div>no access please login</div>
+{% endif %} {% endblock content %}

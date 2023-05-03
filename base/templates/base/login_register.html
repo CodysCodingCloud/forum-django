@@ -1,6 +1,7 @@
 {% extends "main.html" %} {% block content %}
 <div class="container">
 	{% if page == "login" %}
+	<h2>login</h2>
 	<form method="post" action="">
 		{% csrf_token %}
 		<!-- {{form.as_p}} -->

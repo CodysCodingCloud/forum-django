@@ -1,0 +1,138 @@
+:root {
+	--primary: #212a3e;
+	--secondary: #394867;
+	--tertiary: #6f3e7d;
+	--textprimary: #f1f6f9;
+	--textsecondaty: #9ba4b5;
+	--danger: red;
+	--pbutton: aqua;
+}
+* {
+	margin: 0;
+	padding: 0;
+}
+body {
+	background-color: var(--primary);
+	color: var(--textprimary);
+	width: 100%;
+}
+nav {
+	display: flex;
+	max-width: 100%;
+	justify-content: space-between;
+	align-items: center;
+	/* margin-bottom: 1rem; */
+	background-color: var(--secondary);
+	margin-bottom: 1rem;
+}
+.home-container {
+	display: grid;
+	grid-template-columns: 1fr 3fr 1fr;
+	grid-gap: 1rem;
+	min-width: 80%;
+	margin: 0 1rem;
+}
+.topics-container {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+.room-container .top-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+}
+@media screen and (max-width: 768px) {
+	.room-container .top-row {
+		flex-direction: column;
+		align-items: start;
+		gap: 0.5rem;
+	}
+}
+.room-container .top-row h2 {
+	font-size: 1rem;
+	color: var(--textprimary);
+}
+.room-container .top-row h3 {
+	font-size: 0.8rem;
+	color: var(--textsecondaty);
+}
+a {
+	text-decoration: none;
+	color: var(--pbutton);
+}
+.my-btn {
+	border-radius: 0.5rem;
+	background-color: var(--pbutton);
+	padding: 0.5rem;
+	color: var(--primary);
+}
+.roomlist {
+	/* padding: 0.5rem; */
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+.room-item {
+	background-color: var(--secondary);
+	border-radius: 8px;
+	position: relative;
+	padding: 0.5rem;
+}
+.room-item .d-delete {
+	position: absolute;
+	right: 8px;
+	top: 8px;
+}
+.room-item .room-edit {
+	position: absolute;
+	right: 42px;
+	top: 8px;
+}
+.profile-container {
+	display: grid;
+	grid-template-columns: 1fr 3fr 1fr;
+	grid-gap: 1rem;
+	min-width: 80%;
+	margin: 0 1rem;
+}
+
+.feed {
+}
+
+.d-delete {
+	--size: 1.5rem;
+	width: var(--size);
+	height: var(--size);
+	position: relative;
+	box-shadow: 2px 2px black;
+}
+.d-delete:after {
+	content: "";
+	height: 1rem;
+	border-left: 2px solid var(--danger);
+	position: absolute;
+	transform: rotate(45deg);
+	left: calc(var(--size) / 2);
+	top: calc(var(--size) / 4);
+}
+.d-delete:before {
+	content: "";
+	height: 1rem;
+	border-left: 2px solid var(--danger);
+	position: absolute;
+	transform: rotate(-45deg);
+	left: calc(var(--size) / 2);
+	top: calc(var(--size) / 4);
+}
+.d-delete:hover:after {
+	border-left: 4px solid var(--danger);
+}
+.d-delete:hover:before {
+	border-left: 4px solid var(--danger);
+}
+.message-container {
+}
+.participants {
+}
