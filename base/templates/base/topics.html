@@ -1,0 +1,24 @@
+{% extends "main.html" %}
+<!-- child add to the extended template's block -->
+{% block content %}
+<div class="topics-container">
+	<div class="topmenu">
+		<a href="{{ request.META.HTTP_REFERER }}" class="back"></a>
+		<h3>More Topics</h3>
+	</div>
+	<form method="'GET" action="{% url 'topics' %}">
+		<input type="text" name="qtopics" placeholder="search topics" />
+	</form>
+	<div class="topic-list-item">
+		<a href="{% url 'topics' %}">All</a>
+		<p class="count">{{topics.count}}</p>
+	</div>
+	{% for topic in topics %}
+	<div class="topic-list-item">
+		<a href="{% url 'home' %}?q={{ topic.name }}">{{ topic.name }}</a>
+		<p class="count">{{topic.room_set.all.count}}</p>
+	</div>
+	{% endfor %}
+	<a href="{% url 'topics' %}" class="">more</a>
+</div>
+{% endblock content %}

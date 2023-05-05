@@ -132,6 +132,8 @@ a {
 .d-delete:hover:before {
 	border-left: 4px solid var(--danger);
 }
+.room-container {
+}
 .message-container {
 }
 .participants {

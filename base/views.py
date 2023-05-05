@@ -205,3 +205,32 @@ def update_user(request):
 
 def room4(request):
     return HttpResponse('room4')
+
+
+def topics_page(request):
+    """just topics page"""
+    queryset = (
+        request.GET.get('qtopics') if request.GET.get('qtopics') is not None else ''
+    )
+    topics = Topic.objects.filter(
+        Q(name__icontains=queryset)
+        # | Q(room__name__icontains=queryset)
+        # | Q(room__description__icontains=queryset)
+    ).order_by('-updated')
+    context = {"topics": topics}
+    return render(request, 'base/topics.html', context)
+
+
+def activities_page(request):
+    """just topics page"""
+    queryset = (
+        request.GET.get('qtopics') if request.GET.get('qtopics') is not None else ''
+    )
+    topics = Topic.objects.filter(
+        Q(name__icontains=queryset)
+        | Q(room__name__icontains=queryset)
+        | Q(room__description__icontains=queryset)
+    ).order_by('-updated')
+
+    context = {"topics": topics}
+    return render(request, 'base/activity_page.html', context)

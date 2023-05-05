@@ -14,7 +14,7 @@
 		/>
 		<label for="password" name="username" class="form-label">Password:</label>
 		<input
-			type="text"
+			type="password"
 			class="form-control"
 			name="password"
 			placeholder="enter password"
@@ -24,11 +24,19 @@
 	<p>havent signed up yet?</p>
 	<a href="{% url 'register' %}">Signup</a>
 	{% else %}
+	<h2>Register</h2>
 	<form method="post" action="">
-		{% csrf_token %} {{ form.as_p }}
+		{% csrf_token %}
+		<!--{{ form.as_p }}-->
+		{% for field in form %}
+		<div class="form__group form__group">
+			<label for="{{field.label}}">{{field.label}}</label>
+			{{field}}
+		</div>
+		{% endfor %}
 		<input type="submit" value="Register" />
 	</form>
-	<p>havent signed up yet?</p>
+	<p>Already have an account?</p>
 	<a href="{% url 'login' %}">Login</a>
 	{% endif %}
 </div>
