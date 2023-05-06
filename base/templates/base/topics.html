@@ -1,9 +1,9 @@
 {% extends "main.html" %}
 <!-- child add to the extended template's block -->
 {% block content %}
-<div class="topics-container widget">
+<div class="topics-container widget mobile-wide">
 	<div class="toprow">
-		<a href="{{ request.META.HTTP_REFERER }}" class="back"></a>
+		<a href="{{ request.META.HTTP_REFERER }}" class="back">back</a>
 		<h3>More Topics</h3>
 	</div>
 	<form method="'GET" class="search" action="{% url 'topics' %}">
@@ -38,7 +38,8 @@
 			</div>
 		</div>
 		{% endfor %}
-		<a href="{% url 'topics' %}" class="bottomrow">more</a>
+		<!--
+		<a href="{% url 'topics' %}" class="bottomrow">more</a> -->
 	</div>
 </div>
 {% endblock content %}

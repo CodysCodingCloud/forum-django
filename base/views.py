@@ -82,8 +82,10 @@ def home(request):
     ).order_by('-updated')
 
     for room in rooms:
-        room.latest_message = room.message_set.latest('created')
-
+        try:
+            room.latest_message = room.message_set.latest('created')
+        except Message.DoesNotExist:
+            room.latest_message = None
     topics = Topic.objects.all()
     room_count = rooms.count()
     recent_messages = Message.objects.all()
@@ -104,6 +106,7 @@ def room_view(request, pk):
     # orders by -descending vs ascending
     participants = room.participants.all().order_by('username')
     print(participants)
+    participants_count = participants.count()
     if request.method == "POST":
         message = Message.objects.create(
             body=request.POST.get('body'), user=request.user, room=room
@@ -119,6 +122,7 @@ def room_view(request, pk):
         'room': room,
         "room_messages": room_messages,
         'participants': participants,
+        "participants_count": participants_count,
     }
     return render(request, 'base/room.html', context)
 
@@ -191,9 +195,7 @@ def deleteMessage(request, pk):
 
 
 def user_profile(request, pk):
-    print('run', pk)
     userinfo = User.objects.get(id=pk)
-    print('run2', userinfo)
     rooms = userinfo.room_set.all().filter(host__id=pk).order_by('-created')
 
     for room in rooms:
@@ -249,19 +251,19 @@ def topics_page(request):
     return render(request, 'base/topics.html', context)
 
 
-def activities_page(request, pk=''):
+def activities_page(request, pk=None):
     """just feed page"""
 
-    recent_messages = Message.objects.all().order_by('-updated')
-    if pk:
-        recent_messages.filter(user_id=pk)
-        print(pk)
-        print(request.user.id)
-    title = (
-        "My Recent Activity"
-        if request.user.id == pk
-        else str(request.user) + "'s Recent Activity"
-    )
+    recent_messages = None
+    title = "Recent Activiy"
+    if pk is not None:
+        if str(request.user.id) == pk:
+            title = 'My recent Activity'
+        else:
+            title = str(User.objects.get(id=pk)) + "'s Recent Activity"
+        recent_messages = Message.objects.filter(user_id=pk).order_by('-updated')
+    else:
+        recent_messages = Message.objects.all().order_by('-updated')
     context = {"recent_messages": recent_messages, "title": title}
     return render(request, 'base/activity_page.html', context)
 

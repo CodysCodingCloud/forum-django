@@ -1,6 +1,6 @@
 {% extends "main.html" %}
 <!-- child add to the extended template"s block -->
-{% block content %}
+{% block content %} {% include 'base/components/mobile_nav.html'%}
 <div class="profileinfo">
 	{% if request.user == userinfo %}
 

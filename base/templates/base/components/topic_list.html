@@ -1,11 +1,13 @@
 <div class="topics-container">
 	<h3>BROWSE TOPICS</h3>
 	<div>
-		<a href="{% url 'home' %}">All</a>
+		<a href="{% url 'home' %}">All</a
+		><small class="count"> ( {{topics.count}} )</small>
 	</div>
 	{% for topic in topics %}
 	<div>
-		<a href="{% url 'home' %}?q={{ topic.name }}">{{ topic.name }}</a>
+		<a href="{% url 'home' %}?q={{ topic.name }}">{{ topic.name }}</a
+		><small class="count"> ( {{topic.room_set.all.count}} )</small>
 	</div>
 	{% endfor %}
 	<a href="{% url 'topics' %}" class="">more</a>

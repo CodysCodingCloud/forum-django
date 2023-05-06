@@ -35,9 +35,14 @@
 					<!-- {% url "room" room.id %} = /room/1 -->
 				</h3>
 			</div>
-
+			{% if room.latest_message is None %}
 			<div class="bottomrow flex">
-				<div>Recent</div>
+				<div>There is no posts here yet</div>
+			</div>
+
+			{% else %}
+			<div class="bottomrow flex">
+				<div class="recent-line"></div>
 				<div class="content flex-col">
 					<div class="meta flex">
 						<div class="piccontainer">
@@ -59,13 +64,6 @@
 									{{room.latest_message.created|timesince}}</small
 								>
 							</div>
-
-							<div>
-								in
-								<a href="{%url 'room' room.latest_message.room.id%}"
-									>{{room.latest_message.room}}</a
-								>
-							</div>
 						</div>
 					</div>
 					<div class="minicomment">
@@ -79,6 +77,7 @@
 					</div>
 				</div>
 			</div>
+			{% endif%}
 		</div>
 
 		{% endfor %}

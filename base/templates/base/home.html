@@ -1,6 +1,6 @@
 {% extends "main.html" %}
 <!-- child add to the extended template"s block -->
-{% block content %}
+{% block content %} {% include 'base/components/mobile_nav.html'%}
 <div class="home-container">
 	<div class="mobile-hide">{% include 'base/components/topic_list.html'%}</div>
 	<div>{% include 'base/components/room_list.html'%}</div>

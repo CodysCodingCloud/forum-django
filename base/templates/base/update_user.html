@@ -1,17 +1,31 @@
 {% extends "main.html" %}
 <!-- child add to the extended template"s block -->
 {% block content %} {% if request.user.is_authenticated %}
-<div>
-	<form class="form" action="" meythod="post" enctype="multipart/form-data">
-		{% csrf_token %} {% for field in form %}
-		<div class="form__group">
-			<label for="">{{field.label}}</label>
+<div class="widget form-widget">
+	<div class="toprow">
+		<a href="{{ request.META.HTTP_REFERER }}" class="back">back</a>
+		<h2>Update Profile</h2>
+	</div>
+	<form
+		class="formtable"
+		action=""
+		meythod="post"
+		enctype="multipart/form-data"
+	>
+		{% csrf_token %} {% for field in form %} {% if field.label == "Avatar"%}
+		<div class="form-group">
+			<label for="{{field.label}}">{{field.label}}</label>
+			<div>{{field}}</div>
+		</div>
+		{% else%}
+		<div class="form-group">
+			<label for="{{field.label}}">{{field.label}}</label>
 			{{field}}
 		</div>
-		{%endfor%}
+		{% endif%} {%endfor%}
 		<div class="form-buttons">
 			<a href="{% url 'home' %}">cancel</a>
-			<button type="submit">Update</button>
+			<button type="submit" class="btn btn-secondary">Update</button>
 		</div>
 	</form>
 </div>
