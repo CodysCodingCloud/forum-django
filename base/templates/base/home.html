@@ -2,8 +2,8 @@
 <!-- child add to the extended template"s block -->
 {% block content %}
 <div class="home-container">
-	<div>{% include 'base/components/topic_list.html'%}</div>
+	<div class="mobile-hide">{% include 'base/components/topic_list.html'%}</div>
 	<div>{% include 'base/components/room_list.html'%}</div>
-	<div>{% include 'base/components/activity.html'%}</div>
+	<div class="mobile-hide">{% include 'base/components/activity.html'%}</div>
 </div>
 {% endblock content %}

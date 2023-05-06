@@ -4,15 +4,15 @@ from django.shortcuts import render, redirect
 # get_object_or_404, get_list_or_404
 from django.contrib import messages
 from django.http import HttpResponse
-from django.db.models import Q
+from django.db.models import Q, OuterRef, Subquery
 
 # pylint: disable=import-error
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
-from .forms import RoomForm
-from .models import Room, Topic, Message
+
+from .forms import RoomForm, MyUserCreationForm, UserForm
+from .models import Room, Topic, Message, User
 
 
 def login_view(request):
@@ -21,16 +21,16 @@ def login_view(request):
     if request.user.is_authenticated:
         return redirect('/')
     if request.method == 'POST':
-        username = request.POST.get('username').lower()
+        email = request.POST.get('email').lower()
         password = request.POST.get('password')
         try:
-            user = User.objects.get(username=username)
+            user = User.objects.get(email=email)
         except Exception as err:
-            print(err)
+            print('>>>', err)
             messages.error(request, err)
             messages.error(request, 'User does not exist')
         else:
-            user = authenticate(request, username=username, password=password)
+            user = authenticate(request, email=email, password=password)
             if user is not None:
                 login(request, user)
                 return redirect('/')
@@ -42,9 +42,9 @@ def login_view(request):
 def register_view(request):
     """registers user using post"""
     page = 'register'
-    form = UserCreationForm()
+    form = MyUserCreationForm()
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = MyUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.username.lower()
@@ -52,7 +52,14 @@ def register_view(request):
             login(request, user)
             return redirect('/')
         else:
-            messages.error(request, 'an error occurred during registration')
+            print('>>>2')
+            error_messages = []
+            for field, errors in form.errors.items():
+                for error in errors:
+                    error_messages.append(f'{error}')
+            # display error messages
+            for message in error_messages:
+                messages.error(request, message)
     context = {'page': page, 'form': form}
     return render(request, 'base/login_register.html', context)
 
@@ -73,6 +80,10 @@ def home(request):
         | Q(name__icontains=queryset)
         | Q(description__icontains=queryset)
     ).order_by('-updated')
+
+    for room in rooms:
+        room.latest_message = room.message_set.latest('created')
+
     topics = Topic.objects.all()
     room_count = rooms.count()
     recent_messages = Message.objects.all()
@@ -116,16 +127,25 @@ def room_view(request, pk):
 @login_required(login_url='login')
 def createRoom(request):
     form = RoomForm()
+    topics = Topic.objects.all()
     if request.method == 'POST':
-        form = RoomForm(request.POST)
-        if form.is_valid():
-            # name=request.POST.get('name')
-            room = form.save(commit=False)
-            room.host = request.user
-            room.save()
-            return redirect('/')
-        print(request.POST)
-    context = {'form': form}
+        # form = RoomForm(request.POST)
+        # if form.is_valid():
+        #     # name=request.POST.get('name')
+        #     room = form.save(commit=False)
+        #     room.host = request.user
+        #     room.save()
+        #     return redirect('/')
+        topic_name = request.POST.get('topic')
+        topic, created = Topic.objects.get_or_create(name=topic_name)
+        Room.objects.create(
+            host=request.user,
+            topic=topic,
+            name=request.POST.get('name'),
+            description=request.POST.get('description'),
+        )
+        return redirect('/')
+    context = {'form': form, 'topics': topics}
     return render(request, 'base/room_form.html', context)
 
 
@@ -171,8 +191,16 @@ def deleteMessage(request, pk):
 
 
 def user_profile(request, pk):
+    print('run', pk)
     userinfo = User.objects.get(id=pk)
-    rooms = userinfo.room_set.all().order_by('-created')
+    print('run2', userinfo)
+    rooms = userinfo.room_set.all().filter(host__id=pk).order_by('-created')
+
+    for room in rooms:
+        room.latest_message = room.message_set.latest('created')
+    topics = Topic.objects.all()
+    room_count = rooms.count()
+
     topics = Topic.objects.all()
     recent_messages = userinfo.message_set.all().order_by('-created')
     context = {
@@ -221,16 +249,61 @@ def topics_page(request):
     return render(request, 'base/topics.html', context)
 
 
-def activities_page(request):
-    """just topics page"""
-    queryset = (
-        request.GET.get('qtopics') if request.GET.get('qtopics') is not None else ''
-    )
-    topics = Topic.objects.filter(
-        Q(name__icontains=queryset)
-        | Q(room__name__icontains=queryset)
-        | Q(room__description__icontains=queryset)
-    ).order_by('-updated')
+def activities_page(request, pk=''):
+    """just feed page"""
 
-    context = {"topics": topics}
+    recent_messages = Message.objects.all().order_by('-updated')
+    if pk:
+        recent_messages.filter(user_id=pk)
+        print(pk)
+        print(request.user.id)
+    title = (
+        "My Recent Activity"
+        if request.user.id == pk
+        else str(request.user) + "'s Recent Activity"
+    )
+    context = {"recent_messages": recent_messages, "title": title}
     return render(request, 'base/activity_page.html', context)
+
+
+import datetime
+from django.db.models.functions import Lower
+
+
+def myNotes(request, pk):
+    instance = Topic.objects.get(pk=1)
+    instance.name = 'new description'
+    #  ManyToManyField
+    instance.participants.add('one', 'two')
+    instance.save()
+
+    queryset = Room.objects.all()
+    queryset_filter = Room.objects.filter(created=datetime.date.today())
+    queryset_exclude = Room.objects.exclude(created__lte=datetime.date(2005, 1, 30))
+    queryset.filter(name__startswith="Do")
+    queryset.filter(name__iexact="Doctor Who")
+    # limit 5
+    queryset[:5]
+    # off set 5 limit 5
+    queryset[5:10]
+    # get returns single instance, returns newest
+    queryset.order_by('-updated').get()
+    queryset.order_by(Lower("name").desc()).get()
+    queryset.filter(user__name__contains="Lennon")
+    # joins
+    queryset_j = Room.objects.filter(blog__name="Beatles Blog")
+    # One-to-many relationships
+    has_fkey = Room.objects.get(id=2)
+    has_fkey.Topic  # access to topic
+    target_relationship = Topic.objects.all().room_set.all()
+    # Many Many Relationships
+    has_ManyToManyField = Room.objects.get(id=5).room_set.all()
+    target_of_has_ManyToManyField = Topic.objects.get(id=5)
+    populated = target_of_has_ManyToManyField.participants.all()
+    populated.count()  # or filter or whatever you fancy
+    # One-to-one relationships | works the same on reverse
+    has_OneToOneField = User.objects.get(pk=pk)
+    has_OneToOneField.profile
+    #
+    context = {'instance': instance}
+    return render(request, '.html', context)

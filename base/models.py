@@ -2,13 +2,27 @@
 import uuid
 from django.db import models
 
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 
 # from django.conf import settings
 
+# Using a custom Auth model instead
+from django.contrib.auth.models import AbstractUser
+
+
+class User(AbstractUser):
+    # pass for init?
+    first_name = models.CharField(max_length=200, null=True)
+    last_name = models.CharField(max_length=200, null=True)
+    email = models.EmailField(unique=True, null=True)
+    bio = models.TextField(null=True)
+    # checks MEDIA_ROOT for image
+    avatar = models.ImageField(null=True, default="avatar.svg")
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+
 # Create your models here.
-
-
 class Topic(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200)

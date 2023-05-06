@@ -1,14 +1,26 @@
 {% extends "main.html" %}
 <!-- child add to the extended template"s block -->
-{% block content %} {% if request.user == userinfo %}
-<h1>My Profile Page</h1>
-<a href="{% url 'update_user' %}">edit profile</a>
-{% else %}
-<h1>{{userinfo.username}}'s Profile</h1>
-{% endif %}
-<div class="profile-container">
-	<div>{% include 'base/components/topic_list.html'%}</div>
+{% block content %}
+<div class="profileinfo">
+	{% if request.user == userinfo %}
+
+	<h1>My Profile Page</h1>
+	<a href="{% url 'update_user' %}">edit profile</a>
+	{% else %}
+	<h1>{{userinfo.email}}'s Profile</h1>
+	{% endif %}
+	<div class="userinfo">
+		<img
+			class="fullprofile"
+			src="{{userinfo.avatar.url}}"
+			alt="{{userinfo}} avatar"
+		/>
+		<div class="name">{{userinfo.email}}</div>
+	</div>
+</div>
+<div class="home-container">
+	<div class="mobile-hide">{% include 'base/components/topic_list.html'%}</div>
 	<div>{% include 'base/components/room_list.html'%}</div>
-	<div>{% include 'base/components/activity.html'%}</div>
+	<div class="mobile-hide">{% include 'base/components/activity.html'%}</div>
 </div>
 {% endblock content %}

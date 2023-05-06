@@ -21,6 +21,7 @@ urlpatterns = [
     path("profile/<str:pk>/", views.user_profile, name="user"),
     path("update-user/", views.update_user, name="update_user"),
     path("topics/", views.topics_page, name="topics"),
+    path("feed/<str:pk>/", views.activities_page, name="activity"),
     path("feed/", views.activities_page, name="activity"),
     # path('user/<str:pk>/', views.user, name='user'),
 ]

@@ -1,27 +1,84 @@
 <div class="room-container">
 	<div class="top-row">
 		<div class="left">
-			<h2>What would you like to see?</h2>
+			<h2>What would you like?</h2>
 			<h3>{{ room_count }} Available Rooms</h3>
 		</div>
 		<div class="right">
-			<a href="{% url 'create-room' %}" class="my-btn">Create a new Room?</a>
+			<a href="{% url 'create-room' %}" class="btn btn-secondary">+ New Room</a>
 		</div>
 	</div>
 	<div class="roomlist">
 		{% for room in rooms %}
 		<div class="room-item">
-			<a href="{% url 'user' room.host.id %}">@{{ room.host }}</a>
+			<div class="toprow flex">
+				<a href="{% url 'user' room.host.id %}" class="flex"
+					><div class="piccontainer">
+						<img
+							class="miniprofile"
+							src="{{room.host.avatar.url}}"
+							alt="{{room.host}} avatar"
+						/>
+					</div>
+					<div>Host @{{ room.host }}</div></a
+				>
+				<small class="timestamp"> {{message.created|timesince}}</small>
+			</div>
 			{% if request.user == room.host %}
 			<a href="{% url 'update-room' room.id %}" class="room-edit">edit</a>
 			<a href="{% url 'delete-room' room.id %}" class="d-delete"></a>
 			{% endif %}
+			<div class="content">
+				<h3>
+					<a href="{% url 'room' room.id %}">{{ room.name }}</a>
+					<small>in {{ room.topic.name }}</small>
+					<!-- {% url "room" room.id %} = /room/1 -->
+				</h3>
+			</div>
 
-			<h5>
-				<a href="{% url 'room' room.id %}">{{ room.name }}</a>
-				<small>in {{ room.topic.name }}</small>
-				<!-- {% url "room" room.id %} = /room/1 -->
-			</h5>
+			<div class="bottomrow flex">
+				<div>Recent</div>
+				<div class="content flex-col">
+					<div class="meta flex">
+						<div class="piccontainer">
+							<a href="{% url 'user' room.latest_message.user.id %}"
+								><img
+									class="miniprofile"
+									src="{{room.latest_message.user.avatar.url}}"
+									alt="{{room.latest_message.user}} avatar"
+							/></a>
+						</div>
+						<div class="flex-col">
+							<div>
+								<a href="{% url 'user' room.latest_message.user.id %}"
+									>@{{room.latest_message.user}}</a
+								>
+							</div>
+							<div>
+								<small class="timestamp">
+									{{room.latest_message.created|timesince}}</small
+								>
+							</div>
+
+							<div>
+								in
+								<a href="{%url 'room' room.latest_message.room.id%}"
+									>{{room.latest_message.room}}</a
+								>
+							</div>
+						</div>
+					</div>
+					<div class="minicomment">
+						<p>{{room.latest_message}}</p>
+						{% if request.user == room.latest_message.user %}
+						<a
+							href="url 'delete-room.latest_message' room.latest_message.id"
+							class="d-delete"
+						></a>
+						{% endif %}
+					</div>
+				</div>
+			</div>
 		</div>
 
 		{% endfor %}
