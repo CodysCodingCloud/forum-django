@@ -2,38 +2,40 @@
 	<div class="toprow">
 		<h2>Recent activity</h2>
 	</div>
-	{% for message in recent_messages%}
 	<div class="content flex-col">
-		<div class="meta flex">
-			<div class="piccontainer">
-				<a href="{% url 'user' message.user.id %}"
-					><img
-						class="miniprofile"
-						src="{{message.user.avatar.url}}"
-						alt="{{message.user}} avatar"
-				/></a>
-			</div>
-			<div class="flex-col">
-				<div>
-					<a href="{% url 'user' message.user.id %}">@{{message.user}}</a>
+		{% for message in recent_messages%}
+		<div class="recent_messages flex-col">
+			<div class="meta flex">
+				<div class="piccontainer">
+					<a href="{% url 'user' message.user.id %}"
+						><img
+							class="miniprofile"
+							src="{{message.user.avatar.url}}"
+							alt="{{message.user}} avatar"
+					/></a>
 				</div>
-				<div>
-					<small class="timestamp"> {{message.created|timesince}}</small>
-				</div>
+				<div class="flex-col">
+					<div>
+						<a href="{% url 'user' message.user.id %}">@{{message.user}}</a>
+					</div>
+					<div>
+						<small class="timestamp"> {{message.created|timesince}}</small>
+					</div>
 
-				<div>
-					in <a href="{%url 'room' message.room.id%}">{{message.room}}</a>
+					<div>
+						in <a href="{%url 'room' message.room.id%}">{{message.room}}</a>
+					</div>
 				</div>
 			</div>
+			<div class="minicomment">
+				<p>{{message}}</p>
+				{% if request.user == message.user %}
+				<a href="url 'delete-message' message.id" class="d-delete"></a>
+				{% endif %}
+			</div>
+			<hr />
 		</div>
-		<div class="minicomment">
-			<p>{{message}}</p>
-			{% if request.user == message.user %}
-			<a href="url 'delete-message' message.id" class="d-delete"></a>
-			{% endif %}
-		</div>
-		<hr />
+
+		{%endfor%}
 	</div>
-
-	{%endfor%}
 </div>
