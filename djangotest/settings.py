@@ -158,7 +158,7 @@ if not DEBUG:
 
 # if you need to store images
 MEDIA_URL = 'uploads/'
-MEDIA_ROOT = BASE_DIR / 'uploads/images'
+MEDIA_ROOT = BASE_DIR / 'static/uploads/images'
 
 
 # Default primary key field type
