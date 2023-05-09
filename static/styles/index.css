@@ -29,6 +29,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	overflow-y: auto;
+
 	/* position: absolute; */
 	/* top: 0; */
 	/* bottom: 0; */
@@ -37,8 +38,7 @@ body {
 }
 .bodyinner {
 	max-width: var(--maxwidth);
-	/* margin: 0 auto; */
-	padding: 0 1rem;
+	padding: 1rem 1rem 0 1rem;
 	flex-grow: 1;
 	display: flex;
 	flex-direction: column;
@@ -48,9 +48,8 @@ body {
 }
 nav {
 	max-width: 100vw;
-	/* margin-bottom: 1rem; */
 	background-color: var(--secondary);
-	margin-bottom: 1rem;
+	/* margin-bottom: 1rem; */
 }
 .nav-inner {
 	max-width: var(--maxwidth);
@@ -105,6 +104,7 @@ nav a:hover {
 	opacity: 0.9;
 }
 .home-container {
+	position: relative;
 	display: grid;
 	grid-template-columns: 1fr 3fr 1fr;
 	grid-gap: 1rem;
@@ -115,6 +115,7 @@ nav a:hover {
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
+	position: sticky;
 }
 .topics-container .search {
 	width: calc(100% - 2rem);
@@ -216,8 +217,12 @@ a {
 }
 
 .feed {
+	max-height: 100%;
+	overflow-y: auto;
 }
-
+.feed .content {
+	/* overflow-y: auto; */
+}
 .d-delete {
 	--size: 1.5rem;
 	width: var(--size);
@@ -477,7 +482,41 @@ a {
 	/* width: 300px; */
 	color: var(--textprimary);
 }
-
+#to-top {
+	background-color: red;
+	z-index: 777;
+	--size: 1.5rem;
+	width: var(--size);
+	height: var(--size);
+	position: sticky;
+	/* left: calc(100vw - 3rem); */
+	/* top: calc(100vh - 4rem); */
+	box-shadow: 1px 1px black;
+}
+/* #to-top:after {
+	content: "";
+	height: 1rem;
+	border-left: 2px solid var(--danger);
+	position: absolute;
+	transform: rotate(45deg);
+	left: calc(var(--size) / 2);
+	top: calc(var(--size) / 4);
+}
+#to-top:before {
+	content: "";
+	height: 1rem;
+	border-left: 2px solid var(--danger);
+	position: absolute;
+	transform: rotate(-45deg);
+	left: calc(var(--size) / 2);
+	top: calc(var(--size) / 4);
+}
+#to-top:hover:after {
+	border-left: 4px solid var(--danger);
+}
+#to-top:hover:before {
+	border-left: 4px solid var(--danger);
+} */
 @media screen and (min-width: 1440px) {
 	.bodyinner {
 		margin: 0 auto;
@@ -486,6 +525,8 @@ a {
 @media screen and (max-width: 768px) {
 	.mobile-hide {
 		display: none;
+		max-height: 100%;
+		overflow-y: auto;
 	}
 	.home-container {
 		display: block;

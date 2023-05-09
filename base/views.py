@@ -199,7 +199,10 @@ def user_profile(request, pk):
     rooms = userinfo.room_set.all().filter(host__id=pk).order_by('-created')
 
     for room in rooms:
-        room.latest_message = room.message_set.latest('created')
+        try:
+            room.latest_message = room.message_set.latest('created')
+        except Exception as err:
+            room.latest_message = None
     topics = Topic.objects.all()
     room_count = rooms.count()
 
