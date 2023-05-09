@@ -36,6 +36,8 @@ DEBUG = False if os.environ.get("PRODUCTION") == "True" else True
 ALLOWED_HOSTS = [
     "codyscodingcloud.com",
     "www.codyscodingcloud.com",
+    "blueforum.codyscodingcloud.com",
+    "www.blueforum.codyscodingcloud.com",
     "127.0.0.1",
 ]
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
@@ -168,6 +170,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = False if os.environ.get("PRODUCTION") == "True" else True
 CORS_ALLOWED_ORIGINS = [
     "https://codyscodingcloud.com",
+    "https://blueforum.codyscodingcloud.com",
     "http://localhost:8080",
     "http://127.0.0.1:9000",
 ]

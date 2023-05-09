@@ -229,10 +229,12 @@ def update_user(request):
         'form': form
     }
     if request.method == 'POST':
-        form = UserForm(request.POST, instance=userinfo)
+        form = UserForm(request.POST, request.FILES, instance=userinfo)
+        print(request.POST)
         if form.is_valid():
+            print('valid')
             form.save()
-            return redirect('profile', pk=userinfo.id)
+            return redirect('user', pk=userinfo.id)
     return render(request, 'base/update_user.html', context)
 
 
