@@ -407,12 +407,6 @@ a {
 	display: grid;
 	grid-template-columns: 1fr 2fr;
 }
-#topic-list {
-	background-color: var(--textsecondaty);
-}
-#room_topic {
-	background-color: var(--textsecondaty);
-}
 .messages {
 	padding: 0.5rem 1rem;
 	color: var(--danger);
