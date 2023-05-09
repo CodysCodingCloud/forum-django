@@ -24,7 +24,8 @@
 	</head>
 
 	<body class="">
-		{% include "navBar.html" %} {% include "base/components/scroll-top.html" %}
+		{% include "navBar.html" %} {% comment %} {% include
+		"base/components/scroll-top.html" %} {% endcomment %}
 		<div class="bodyinner">
 			<!-- like an outlet in react? -->
 			{% block content %} {% endblock content %}
