@@ -145,6 +145,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
+# if you need to store images
+MEDIA_URL = 'uploads/'
+MEDIA_ROOT = BASE_DIR / 'static/uploads'
 
 # Following settings only make sense on production and may break development environments.
 if not DEBUG:
@@ -155,10 +158,6 @@ if not DEBUG:
     # Turn on WhiteNoise storage backend that takes care of compressing static files
     # and creating unique names for each version so they can safely be cached forever.
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# if you need to store images
-MEDIA_URL = 'uploads/'
-MEDIA_ROOT = BASE_DIR / 'static/uploads/images'
 
 
 # Default primary key field type
