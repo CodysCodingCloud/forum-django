@@ -47,3 +47,4 @@ pip-delete-this-directory.txt
 django-cheatsheet*
 seed.py
 dataset*
+staticfiles/

@@ -146,8 +146,8 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # if you need to store images
-MEDIA_URL = 'uploads/'
-MEDIA_ROOT = BASE_DIR / 'static/uploads'
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'static/media'
 
 # Following settings only make sense on production and may break development environments.
 if not DEBUG:
