@@ -29,10 +29,12 @@ urlpatterns = [
     # path('room/',room),
     # path('room/:id',room4),
 ]
+
 # for serving from static, not reccomended
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 # urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if not settings.DEBUG:
+    print('debug false')
     urlpatterns += [
         re_path(
             r'^media/(?P<path>.*)$',
@@ -42,3 +44,6 @@ if not settings.DEBUG:
             },
         ),
     ]
+else:
+    print('debug true')
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
