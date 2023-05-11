@@ -43,13 +43,19 @@ def register_view(request):
     """registers user using post"""
     page = 'register'
     form = MyUserCreationForm()
+    print('user')
+
     if request.method == 'POST':
+        print('POST')
         form = MyUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.username = user.username.lower()
+            user.email = user.email.lower()
+            user.username = user.email
             user.save()
+            print('valid')
             login(request, user)
+            print('login')
             return redirect('/')
         else:
             print('>>>2')
